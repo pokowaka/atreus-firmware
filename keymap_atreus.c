@@ -4,8 +4,8 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
   KEYMAP(Q,   W,   E,   R,   T,  Y,    U,   I,   O,   P, \
          A,   S,   D,   F,   G,  H,    J,   K,   L,   SCLN, \
-         Z,   X,   C,   V,   B,  LCTL, N,   M,  COMM, DOT, SLSH, \
-         LSFT, ESC, TAB, FN0, BSPC, LALT, SPC, ENT, PGUP, PGDN, LGUI),
+         Z,   X,   C,   V,   B,  LALT, N,   M,  COMM, DOT, SLSH, \
+         ESC, TAB, FN0, LSFT, BSPC, LCTL, SPC, ENT, LGUI, PGUP, PGDN),
   /* 1: fn with software-dvorak-ized punctuation */
   KEYMAP(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
          QUOT, FN1, FN2, FN3, RBRC, LBRC, MINS, EQL, FN4, FN5, \
