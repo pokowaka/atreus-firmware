@@ -15,6 +15,23 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          FN17, BSLS, FN16, GRV, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS) \
 };
 
+enum function_id {
+  TEENSY_KEY,
+};
+
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+{
+  keyevent_t event = record->event;
+
+  if (id == TEENSY_KEY) {
+    clear_keyboard();
+    print("\n\nJump to bootloader... ");
+    _delay_ms(250);
+    bootloader_jump(); // should not return
+    print("not supported.\n");
+  }
+}
+
 // looks like all normally-shifted keys need to be listed here
 const uint16_t PROGMEM fn_actions[] = {
   [0] = ACTION_LAYER_MOMENTARY(1),  // to Fn overlay
@@ -41,7 +58,8 @@ const uint16_t PROGMEM fn_actions[] = {
   // row 3
   [16] = ACTION_MODS_KEY(MOD_LSFT, KC_QUOT), // dvorak _
   [17] = ACTION_MODS_KEY(MOD_LSFT, KC_BSLS),
+  [18] = ACTION_MODS_KEY(MOD_LSFT, KC_INSERT), // for pasting
 
   // other
-  [18] = ACTION_LAYER_TOGGLE(1),     // toggle arrow overlay
+  [19] = ACTION_FUNCTION(TEENSY_KEY),
 };
