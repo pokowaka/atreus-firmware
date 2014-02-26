@@ -7,12 +7,12 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KEYMAP(P, O, I, U, Y, Q, W, E, R, T, \
          SCLN, L, K, J, H, A, S, D, F, G, \
          SLSH, DOT, COMM, M, N, LALT, Z, X, C, V, B, \
-         PGDN, PGUP, LGUI, ENT, SPC, LCTL, ESC, TAB, FN0, LSFT, BSPC),
+         PGDN, PGUP, ENT, FN0, SPC, LCTL, ESC, TAB, LGUI, LSFT, BSPC),
   /* 1: fn with software-dvorak-ized punctuation */
   KEYMAP(0, 9, 8, 7, 6, 1, 2, 3, 4, 5, \
          FN5, FN4, EQL, MINS, LBRC, QUOT, FN1, FN2, FN3, RBRC, \
-         FN15, FN14, FN13, FN12, FN11, TRNS, FN6, FN7, FN8, FN9, FN10, \
-         FN17, BSLS, FN16, GRV, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS) \
+         FN14, FN15, FN13, FN12, FN11, TRNS, FN6, FN7, FN8, FN9, FN10, \
+         BSLS, FN17, FN16, TRNS, TRNS, TRNS, FN19, FN18, TRNS, TRNS, GRV) \
 };
 
 enum function_id {
