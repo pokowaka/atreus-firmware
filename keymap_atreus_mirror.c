@@ -1,18 +1,26 @@
 #include "keymap_common.h"
 
-/* because sometimes I'm an idiot when I'm soldering. */
-
 const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
-  KEYMAP(P, O, I, U, Y, Q, W, E, R, T, \
-         SCLN, L, K, J, H, A, S, D, F, G, \
-         SLSH, DOT, COMM, M, N, LALT, Z, X, C, V, B, \
-         PGDN, PGUP, ENT, FN0, SPC, LCTL, ESC, TAB, LGUI, LSFT, BSPC),
+  KEYMAP_MIRROR(Q,   W,   E,   R,   T,  Y,    U,   I,   O,   P, \
+         A,   S,   D,   F,   G,  H,    J,   K,   L,   SCLN, \
+         Z,   X,   C,   V,   B,  LALT, N,   M,  COMM, DOT, SLSH, \
+         ESC, TAB, LGUI, LSFT, BSPC, LCTL, SPC, FN0, PGUP, PGDN, ENT),
   /* 1: fn with software-dvorak-ized punctuation */
-  KEYMAP(0, 9, 8, 7, 6, 1, 2, 3, 4, 5, \
-         FN5, FN4, EQL, MINS, LBRC, QUOT, FN1, FN2, FN3, RBRC, \
-         FN14, FN15, FN13, FN12, FN11, TRNS, FN6, FN7, FN8, FN9, FN10, \
-         BSLS, FN17, FN16, TRNS, TRNS, TRNS, FN19, FN18, TRNS, TRNS, GRV) \
+  KEYMAP_MIRROR(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
+         QUOT, FN1, FN2, FN3, RBRC, LBRC, MINS, EQL, FN4, FN5, \
+         FN6, FN7, FN8, FN9, FN10, TRNS, FN11, FN12, FN13, FN15, FN14,  \
+         FN19, FN18, TRNS, TRNS, GRV, TRNS, FN20, TRNS, FN16, FN17, BSLS ), \
+  /* 2: hardware dvorak */
+  KEYMAP_MIRROR(QUOT, COMM, DOT, P, Y, F, G, C, R, L, \
+         A, O, E, U, I, D, H, T, N, S, \
+         SCLN, Q, J, K, X, TRNS, B, M, W, V, Z,  \
+         ESC, TAB, LGUI, LSFT, BSPC, LCTL, SPC, FN21, PGUP, PGDN, ENT), \
+  /* literal punctuation */
+  KEYMAP_MIRROR(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
+         MINS, FN5, FN2, FN3, EQL, SLSH, LBRC, RBRC, FN14, FN1, \
+         FN6, FN7, FN8, FN9, FN10, TRNS, FN11, FN12, FN13, FN15, FN22,  \
+         FN19, FN18, TRNS, TRNS, GRV, TRNS, FN23, TRNS, FN4, FN17, BSLS ) \
 };
 
 enum function_id {
@@ -62,4 +70,10 @@ const uint16_t PROGMEM fn_actions[] = {
 
   // other
   [19] = ACTION_FUNCTION(TEENSY_KEY),
+
+  // hardware dvorak
+  [20] = ACTION_LAYER_SET(2, ON_PRESS),
+  [21] = ACTION_LAYER_MOMENTARY(3),
+  [22] = ACTION_MODS_KEY(MOD_LSFT, KC_SLSH), // ?
+  [23] = ACTION_LAYER_SET(0, ON_PRESS),
 };
