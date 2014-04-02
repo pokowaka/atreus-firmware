@@ -5,26 +5,22 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KEYMAP_MIRROR(Q,   W,   E,   R,   T,  Y,    U,   I,   O,   P, \
          A,   S,   D,   F,   G,  H,    J,   K,   L,   SCLN, \
          Z,   X,   C,   V,   B,  LALT, N,   M,  COMM, DOT, SLSH, \
-         ESC, FN18, LGUI, LSFT, BSPC, LCTL, SPC, FN0, QUOT, LBRC, ENT),
+         ESC, TAB, LGUI, LSFT, BSPC, LCTL, SPC, FN0, QUOT, LBRC, ENT),
   /* 1: fn with software-dvorak-ized punctuation */
-  KEYMAP_MIRROR(FN6, FN7, FN4, FN5, FN17, \
-                PGUP, 7, 8, 9, FN13, \
-                FN8, FN9, FN2, FN3, GRV, \
-                PGDN, 4, 5, 6, FN1, \
-                FN10, FN11, MINS, EQL, FN15, \
-                LALT, BSLS, 1, 2, 3, FN14, \
-                FN19, FN12, TRNS, TRNS, TRNS, \
-                TRNS, FN20, TRNS, E, 0, RBRC), \
+  KEYMAP_MIRROR(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
+         QUOT, FN1, FN2, FN3, RBRC, E, MINS, EQL, FN4, FN5, \
+         FN6, FN7, FN8, FN9, FN10, TRNS, FN11, FN12, FN13, FN15, FN14,  \
+         FN19, FN18, TRNS, TRNS, GRV, TRNS, FN20, TRNS, FN16, FN17, BSLS ), \
   /* 2: hardware dvorak */
   KEYMAP_MIRROR(QUOT, COMM, DOT, P, Y, F, G, C, R, L, \
          A, O, E, U, I, D, H, T, N, S, \
          SCLN, Q, J, K, X, TRNS, B, M, W, V, Z,  \
-         ESC, FN18, LGUI, LSFT, BSPC, LCTL, SPC, FN21, MINS, SLSH, ENT), \
+         ESC, TAB, LGUI, LSFT, BSPC, LCTL, SPC, FN21, MINS, SLSH, ENT), \
   /* literal punctuation */
   KEYMAP_MIRROR(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
-         MINS, FN5, FN2, FN3, EQL, SLSH, LBRC, RBRC, FN14, FN1, \
+         MINS, FN5, FN2, FN3, EQL, DOT, LBRC, RBRC, FN14, FN1, \
          FN6, FN7, FN8, FN9, FN10, TRNS, FN11, FN12, FN13, FN15, FN22,  \
-         FN19, FN12, TRNS, TRNS, GRV, TRNS, FN23, TRNS, FN4, FN17, BSLS ) \
+         FN19, FN18, TRNS, TRNS, GRV, TRNS, FN23, TRNS, FN4, FN17, BSLS ) \
 };
 
 enum function_id {
