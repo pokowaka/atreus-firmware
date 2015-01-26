@@ -1,4 +1,5 @@
 #include "keymap_common.h"
+#include <avr/wdt.h> // for wdt_enable
 
 const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
@@ -14,17 +15,21 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 enum function_id {
-  TEENSY_KEY,
+  BOOTLOADER,
 };
 
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   keyevent_t event = record->event;
 
-  if (id == TEENSY_KEY) {
+  if (id == BOOTLOADER) {
     clear_keyboard();
     print("\n\nJump to bootloader... ");
     _delay_ms(250);
+
+    *(uint16_t *)0x0800 = 0x7777; // these two are a-star-specific
+    wdt_enable(WDTO_120MS);
+
     bootloader_jump(); // should not return
     print("not supported.\n");
   }
@@ -59,5 +64,5 @@ const uint16_t PROGMEM fn_actions[] = {
   [18] = ACTION_MODS_KEY(MOD_LSFT, KC_INSERT), // for pasting
 
   // other
-  [19] = ACTION_FUNCTION(TEENSY_KEY),
+  [19] = ACTION_FUNCTION(BOOTLOADER),
 };
