@@ -72,7 +72,7 @@ uint8_t matrix_scan(void)
 {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         select_row(i);
-        _delay_us(30);  // without this wait read unstable value.
+        _delay_us(50);  // without this wait read unstable value.
         matrix_row_t cols = read_cols();
         if (matrix_debouncing[i] != cols) {
             matrix_debouncing[i] = cols;
@@ -168,29 +168,13 @@ static matrix_row_t read_cols(void)
 static void unselect_rows(void)
 {
     // Hi-Z(DDR:0, PORT:0) to unselect
-    DDRD  &= ~0b00101111;
-    PORTD &= ~0b00101111;
+    PORTD = 15;
 }
+
+#define ROW_COUNT 4
+int rows[ROW_COUNT] = {0, 1, 3, 2};
 
 static void select_row(uint8_t row)
 {
-    // Output low(DDR:1, PORT:0) to select
-    switch (row) {
-        case 0:
-            DDRD  |= (1<<0);
-            PORTD &= ~(1<<0);
-            break;
-        case 1:
-            DDRD  |= (1<<1);
-            PORTD &= ~(1<<1);
-            break;
-        case 2:
-            DDRD  |= (1<<3);
-            PORTD &= ~(1<<3);
-            break;
-        case 3:
-            DDRD  |= (1<<2);
-            PORTD &= ~(1<<2);
-            break;
-    }
+  PORTD = (char)(~(1 << rows[row]));
 }
