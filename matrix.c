@@ -148,6 +148,19 @@ static void  init_cols(void)
 
 static matrix_row_t read_cols(void)
 {
+#ifdef TEENSY2
+    return (PINF&(1<<6) ? 0 : (1<<0)) |
+           (PINF&(1<<5) ? 0 : (1<<1)) |
+           (PINF&(1<<4) ? 0 : (1<<2)) |
+           (PINB&(1<<7) ? 0 : (1<<3)) |
+           (PINB&(1<<6) ? 0 : (1<<4)) |
+           (PINB&(1<<5) ? 0 : (1<<5)) |
+           (PINB&(1<<4) ? 0 : (1<<6)) |
+           (PINB&(1<<3) ? 0 : (1<<7)) |
+           (PINB&(1<<2) ? 0 : (1<<8)) |
+           (PINB&(1<<1) ? 0 : (1<<9)) |
+           (PINB&(1<<0) ? 0 : (1<<10)) ;
+#else
     return (PINB&(1<<7) ? 0 : (1<<0)) |
            (PIND&(1<<6) ? 0 : (1<<1)) |
            (PINF&(1<<7) ? 0 : (1<<2)) |
@@ -159,20 +172,25 @@ static matrix_row_t read_cols(void)
            (PINB&(1<<5) ? 0 : (1<<8)) |
            (PINC&(1<<6) ? 0 : (1<<9)) |
            (PIND&(1<<7) ? 0 : (1<<10)) ;
+#endif
 }
 
 /* Row pin configuration
  * row: 0   1   2   3
- * pin: D0  D1  D3  D2
+ * pin: D0  D1  D3  D2    (a-star micro)
+ * pin: D0  D1  D2  D3    (teensy2)
  */
 static void unselect_rows(void)
 {
-    // Hi-Z(DDR:0, PORT:0) to unselect
     PORTD = 15;
 }
 
 #define ROW_COUNT 4
+#ifdef TEENSY2
+int rows[ROW_COUNT] = {0, 1, 2, 3};
+#else
 int rows[ROW_COUNT] = {0, 1, 3, 2};
+#endif
 
 static void select_row(uint8_t row)
 {

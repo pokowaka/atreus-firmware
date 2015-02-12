@@ -18,13 +18,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* translates key to keycode */
-uint8_t keymap_key_to_keycode(uint8_t layer, key_t key)
+uint16_t actionmap_key_to_action(uint8_t layer, key_t key)
 {
-    return pgm_read_byte(&keymaps[(layer)][(key.row)][(key.col)]);
+    return pgm_read_word(&keymaps[(layer)][(key.row)][(key.col)]);
 }
 
 /* translates Fn keycode to action */
 action_t keymap_fn_to_action(uint8_t keycode)
 {
     return (action_t){ .code = pgm_read_word(&fn_actions[FN_INDEX(keycode)]) };
+}
+
+// TODO: currently halts the operation but does not enter the bootloader.
+// See https://github.com/tmk/tmk_keyboard/issues/179
+void bootloader() {
+  clear_keyboard();
+  print("\n\nJump to bootloader... ");
+  _delay_ms(250);
+  bootloader_jump(); // doesn't actually work ATM
+  print("not supported.\n");
 }

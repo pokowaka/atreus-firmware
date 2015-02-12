@@ -27,7 +27,7 @@
 # make flip-ee = Download the eeprom file to the device, using Atmel FLIP
 #                (must have Atmel FLIP installed).
 #
-# make debug = Start either simulavr or avarice as specified for debugging, 
+# make debug = Start either simulavr or avarice as specified for debugging,
 #              with avr-gdb or avr-insight as the front end for debugging.
 #
 # make filename.s = Just compile filename.c into the assembler code only.
@@ -38,7 +38,8 @@
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
-USB ?= /dev/cu.usbmodem1421
+# Set to /dev/cu.usbmodem1421 or whatever on Macs
+USB ?= /dev/ttyACM0
 
 # Target file name (without extension).
 TARGET = atreus
@@ -54,11 +55,8 @@ SRC =	keymap_common.c \
 	matrix.c \
 	led.c
 
-ifdef KEYMAP
-    SRC := keymap_$(KEYMAP).c $(SRC)
-else
-    SRC := keymap_atreus.c $(SRC)
-endif
+KEYMAP ?= qwerty
+SRC := keymap_$(KEYMAP).c $(SRC)
 
 CONFIG_H = config.h
 
@@ -134,7 +132,9 @@ OPT_DEFS += -DNO_SUSPEND_POWER_DOWN
 VPATH += $(TARGET_DIR)
 VPATH += $(TOP_DIR)
 
-upload: $(TARGET).hex
+build: $(TARGET).hex
+
+upload: build
 	while [ ! -r $(USB) ]; do sleep 1; done; \
 	avrdude -p $(MCU) -c avr109 -U flash:w:$(TARGET).hex -P $(USB)
 
