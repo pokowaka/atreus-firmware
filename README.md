@@ -63,9 +63,13 @@ Sometimes it can be tricky to get the timing right with the hard
 reset; it can take a few attempts when you are first uploading the
 firmware to a fresh board.
 
-If you can't find the path to the USB serial device, list the contents
-of `/dev/`, then put the controller into its bootloader and list them
-again. The correct device should only be present when the bootloader is active.
+You can identify the USB device like so:
+
+```
+$ ls /dev > /tmp/dev-off # run this while the device is unplugged
+$ ls /dev > /tmp/dev-on # run this while the device is in bootloader mode
+$ diff /tmp/dev-off /tmp/dev-on # this will show the device path
+```
 
 ## Teensy 2
 
