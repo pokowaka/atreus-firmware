@@ -15,9 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "keymap_common.h"
-#ifndef TEENSY2
-#include <avr/wdt.h> // for wdt_enable
-#endif
 
 /* translates key to keycode */
 uint16_t actionmap_key_to_action(uint8_t layer, key_t key)
@@ -39,7 +36,6 @@ void bootloader() {
   _delay_ms(250);
 #ifndef TEENSY2
   *(uint16_t *)0x0800 = 0x7777; // these two are a-star-specific
-  wdt_enable(WDTO_120MS);
 #endif
   bootloader_jump(); // doesn't actually work ATM
   print("not supported.\n");
