@@ -34,7 +34,7 @@ void bootloader() {
   clear_keyboard();
   print("\n\nJump to bootloader... ");
   _delay_ms(250);
-#ifndef TEENSY2
+#ifndef TEENSY
   *(uint16_t *)0x0800 = 0x7777; // these two are a-star-specific
 #endif
   bootloader_jump(); // doesn't actually work ATM

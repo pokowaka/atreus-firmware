@@ -134,7 +134,7 @@ VPATH += $(TOP_DIR)
 
 # TODO: this is dumb and redundant
 ifdef TEENSY
-	OPT_DEFS += -DTEENSY
+	OPT_DEFS += -DTEENSY -DBOOTLOADER_SIZE=512
 endif
 
 build: $(TARGET).hex
