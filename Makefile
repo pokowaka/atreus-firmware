@@ -132,6 +132,11 @@ OPT_DEFS += -DNO_SUSPEND_POWER_DOWN
 VPATH += $(TARGET_DIR)
 VPATH += $(TOP_DIR)
 
+# TODO: this is dumb and redundant
+ifdef TEENSY
+	OPT_DEFS += -DTEENSY
+endif
+
 build: $(TARGET).hex
 
 upload: build

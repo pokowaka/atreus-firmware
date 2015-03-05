@@ -148,7 +148,7 @@ static void  init_cols(void)
 
 static matrix_row_t read_cols(void)
 {
-#ifdef TEENSY2
+#ifdef TEENSY
     return (PINF&(1<<6) ? 0 : (1<<0)) |
            (PINF&(1<<5) ? 0 : (1<<1)) |
            (PINF&(1<<4) ? 0 : (1<<2)) |
@@ -186,7 +186,7 @@ static void unselect_rows(void)
 }
 
 #define ROW_COUNT 4
-#ifdef TEENSY2
+#ifdef TEENSY
 int rows[ROW_COUNT] = {0, 1, 2, 3};
 #else
 int rows[ROW_COUNT] = {0, 1, 3, 2};
