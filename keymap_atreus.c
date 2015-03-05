@@ -1,39 +1,17 @@
 #include "keymap_common.h"
-#include <avr/wdt.h> // for wdt_enable
 
-const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
-  KEYMAP(Q,   W,   E,   R,   T,  Y,    U,   I,   O,   P, \
-         A,   S,   D,   F,   G,  H,    J,   K,   L,   SCLN, \
-         Z,   X,   C,   V,   B,  LALT, N,   M,  COMM, DOT, SLSH, \
-         ESC, TAB, LGUI, LSFT, BSPC, LCTL, SPC, FN0, PGUP, PGDN, ENT),
+  KEYMAP(KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,  KC_Y,    KC_U,   KC_I,   KC_O,   KC_P, \
+         KC_A,   KC_S,   KC_D,   KC_F,   KC_G,  KC_H,    KC_J,   KC_K,   KC_L,   KC_SCLN, \
+         KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,  KC_LALT, KC_N,   KC_M,  KC_COMM, KC_DOT, KC_SLSH, \
+         KC_ESC, KC_TAB, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_SPC, KC_FN0, KC_PGUP, KC_PGDN, KC_ENT),
   /* 1: fn with software-dvorak-ized punctuation */
-  KEYMAP(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, \
-         MINS, FN1, FN2, FN3, RBRC, LBRC, MINS, EQL, FN4, FN5, \
-         FN6, FN7, FN8, FN9, FN10, TRNS, FN11, FN12, FN13, FN15, FN14,  \
-         FN19, FN18, TRNS, TRNS, GRV, TRNS, TRNS, TRNS, FN16, FN17, BSLS ) \
+  KEYMAP(KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, \
+         KC_MINS, KC_FN1, KC_FN2, KC_FN3, KC_RBRC, KC_LBRC, KC_MINS, KC_EQL, KC_FN4, KC_FN5, \
+         KC_FN6, KC_FN7, KC_FN8, KC_FN9, KC_FN10, KC_TRNS, KC_FN11, KC_FN12, KC_FN13, KC_FN15, \
+         KC_FN14, KC_FN19, KC_FN18, KC_TRNS, KC_TRNS, KC_GRV, KC_TRNS, KC_TRNS, KC_TRNS, KC_FN16, KC_FN17, KC_BSLS)
 };
-
-enum function_id {
-  BOOTLOADER,
-};
-
-void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-  keyevent_t event = record->event;
-
-  if (id == BOOTLOADER) {
-    clear_keyboard();
-    print("\n\nJump to bootloader... ");
-    _delay_ms(250);
-
-    *(uint16_t *)0x0800 = 0x7777; // these two are a-star-specific
-    wdt_enable(WDTO_120MS);
-
-    bootloader_jump(); // should not return
-    print("not supported.\n");
-  }
-}
 
 // looks like all normally-shifted keys need to be listed here
 const uint16_t PROGMEM fn_actions[] = {
@@ -66,3 +44,10 @@ const uint16_t PROGMEM fn_actions[] = {
   // other
   [19] = ACTION_FUNCTION(BOOTLOADER),
 };
+
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+{
+    if (id == BOOTLOADER) {
+        bootloader();
+    }
+}
