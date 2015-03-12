@@ -5,12 +5,11 @@ ergo keyboard.
 
 The TMK firmware is more featureful than the default
 [Atreus firmware](https://github.com/technomancy/atreus-firmware),
-however it is much more complex, doesn't work with low-voltage
-laptops.
+however it is much more complex.
 
 There is also a [firmware](https://github.com/technomancy/menelaus)
 implemented in [Microscheme](http://microscheme.org), but that is intended
-primarily for educational purposes.
+primarily for educational purposes at this point.
 
 ## Prerequisites
 
