@@ -28,8 +28,6 @@ action_t keymap_fn_to_action(uint8_t keycode)
     return (action_t){ .code = pgm_read_word(&fn_actions[FN_INDEX(keycode)]) };
 }
 
-// TODO: currently halts the operation but does not enter the bootloader.
-// See https://github.com/tmk/tmk_keyboard/issues/179
 void bootloader() {
   clear_keyboard();
   print("\n\nJump to bootloader... ");

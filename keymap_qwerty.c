@@ -15,7 +15,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          SHIFT(KC_5), SHIFT(KC_6), KC_LBRC, KC_RBRC, SHIFT(KC_GRAVE), \
          SHIFT(KC_7), KC_1, KC_2, KC_3, KC_BSLS,                       \
          KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, \
-         KC_SPC, KC_FN0, KC_DOT, KC_0, KC_RBRC), \
+         KC_SPC, KC_FN0, KC_DOT, KC_0, KC_EQUAL), \
   /* 2: arrows and function keys */
   LAYER_TWO
 };
