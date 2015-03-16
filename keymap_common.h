@@ -50,6 +50,15 @@ extern const uint16_t fn_actions[];
   { K2A, K30, K31, K32, K33, K34,   K36, K37, K38, K39, K3A }      \
 }
 
+#define FN_LAYER   KEYMAP(SHIFT(KC_1), SHIFT(KC_2), SHIFT(KC_LBRC), SHIFT(KC_RBRC), SHIFT(KC_BSLS), \
+                          KC_PGUP, KC_7, KC_8, KC_9, SHIFT(KC_8),       \
+                          SHIFT(KC_3), SHIFT(KC_4), SHIFT(KC_9), SHIFT(KC_0), KC_GRAVE, \
+                          KC_PGDN, KC_4, KC_5, KC_6, SHIFT(KC_EQUAL),   \
+                          SHIFT(KC_5), SHIFT(KC_6), KC_LBRC, KC_RBRC, SHIFT(KC_GRAVE), \
+                          SHIFT(KC_7), KC_1, KC_2, KC_3, KC_BSLS,       \
+                          KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, \
+                          KC_SPC, KC_FN0, KC_DOT, KC_0, KC_EQUAL)
+
 #define LAYER_TWO KEYMAP(KC_INS, KC_HOME, KC_UP, KC_END, KC_PGUP, KC_UP, KC_F7, KC_F8, KC_F9, KC_F10, \
                          KC_DEL, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGDN, KC_DOWN, KC_F4, KC_F5, KC_F6, KC_F11, \
                          KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12, \
