@@ -70,6 +70,9 @@ $ ls /dev > /tmp/dev-on # run this while the device is in bootloader mode
 $ diff /tmp/dev-off /tmp/dev-on # this will show the device path
 ```
 
+If the upload does not complete, check the permissions on the USB
+device and ensure it's writeable by your user.
+
 ## Teensy 2
 
 This codebase defaults to targeting the most recent PCB-based design
