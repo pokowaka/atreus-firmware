@@ -23,20 +23,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          KC_PGDN, KC_4, KC_5, KC_6, SHIFT(KC_RBRC), \
          SHIFT(KC_5), SHIFT(KC_6), KC_MINS, KC_EQUAL, SHIFT(KC_GRAVE), \
          SHIFT(KC_7), KC_1, KC_2, KC_3, KC_BSLS,                       \
-         KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, \
+         KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_FN4, KC_BSPC, KC_LCTL, KC_LALT, \
          KC_SPC, KC_FN0, KC_E, KC_0, KC_RBRC), \
   /* 2: arrows and function keys */
   KEYMAP(KC_INS, KC_HOME, KC_UP, KC_END, KC_PGUP, KC_UP, KC_F7, KC_F8, KC_F9, KC_F10, \
          KC_DEL, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGDN, KC_DOWN, KC_F4, KC_F5, KC_F6, KC_F11, \
-         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12, \
-         KC_NO, KC_NO, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC, KC_FN2, KC_NO, KC_NO, KC_FN3)
+         KC_NO, KC_NO, KC_NO, KC_NO, KC_FN3, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12, \
+         KC_NO, KC_LSFT, KC_LGUI, KC_FN4, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC, KC_FN2, KC_NO, KC_NO, KC_ENT)
 };
 
 const uint16_t PROGMEM fn_actions[] = {
   [0] = ACTION_LAYER_MOMENTARY(1),  // to Fn overlay
   [1] = ACTION_LAYER_ON(2, 1),  // switch to layer 2
   [2] = ACTION_LAYER_OFF(2, 1),  // switch back to layer 0
-  [3] = ACTION_FUNCTION(BOOTLOADER)
+  [3] = ACTION_FUNCTION(BOOTLOADER),
+  [4] = ACTION_LAYER_MOMENTARY(2),  // to Fn overlay
 };
 
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
