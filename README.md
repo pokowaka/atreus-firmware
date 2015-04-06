@@ -86,3 +86,9 @@ KEYMAP=qwerty`.  Specifying the path to the USB device as per above is
 unnecessary. Also getting to the bootloader on the Teensy is simpler;
 if you can't do it in software simply press the hardware reset button
 once.
+
+## PCB flip
+
+If you assembled your board with the PCB in backwards, never fear!
+This is easy to fix in the firmware. Compile with `OPT_DEFS=-DPCBFLIP make`
+to use the pinout for the reversed board.
