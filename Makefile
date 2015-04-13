@@ -137,9 +137,6 @@ ifdef TEENSY
 	OPT_DEFS += -DTEENSY -DBOOTLOADER_SIZE=512
 endif
 
-udev:
-	cp a-star.rules /etc/udev/rules.d/
-
 build: $(TARGET).hex
 
 upload: build
@@ -149,3 +146,7 @@ upload: build
 include $(TOP_DIR)/protocol/lufa.mk
 include $(TOP_DIR)/common.mk
 include $(TOP_DIR)/rules.mk
+
+udev:
+	cp a-star.rules /etc/udev/rules.d/
+
