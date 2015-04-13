@@ -21,6 +21,11 @@ On Debian-based systems:
 
     $ sudo apt-get install avrdude gcc-avr avr-libc
 
+Some linux-based systems will need a udev rule to grant permissions to
+the USB device for uploading firmware.
+
+    $ sudo make udev
+
 On Mac OS X with Homebrew:
 
     $ brew tap larsimmisch/avr
@@ -71,7 +76,9 @@ $ diff /tmp/dev-off /tmp/dev-on # this will show the device path
 ```
 
 If the upload does not complete, check the permissions on the USB
-device and ensure it's writeable by your user.
+device and ensure it's writeable by your user. You may need to run
+`sudo make udev` on some Linux-based systems to install a udev rule if
+the permissions aren't right.
 
 ## Teensy 2
 
