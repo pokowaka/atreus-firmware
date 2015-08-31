@@ -1,12 +1,20 @@
 #include "keymap_common.h"
 
-// This layout is designed to be used on machines where the OS is
-// already set to a dvorak layout. It assumes that the dvorak mapping
-// will be happening on the PC side and sends "un-dvorakized"
-// keycodes. (So it sends qwerty letters, but specially-shuffled
-// punctuation.)  This is helpful for laptops where you want to be
-// able to use the internal keyboard in dvorak without having to
-// change the OS mappings.
+/* This layout is designed to be used on machines where the OS is
+   already set to a dvorak layout. It assumes that the dvorak mapping
+   will be happening on the PC side and sends "un-dvorakized"
+   keycodes. (So it sends qwerty letters, but specially-shuffled
+   punctuation.)  This is helpful for laptops where you want to be
+   able to use the internal keyboard in dvorak without having to
+   change the OS mappings. */
+
+/* This keymap allows you to hold down fn+shift to hit keys on L2
+   momentarily, rather than switching layers in a "sticky" way.
+
+   NB: There is currently a bug in TMK where it works fine if you
+   release shift first, but if you release fn first, the fn key
+   remains stuck down until you tap fn again to release it. */
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
@@ -28,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 2: arrows and function keys */
   KEYMAP(KC_INS, KC_HOME, KC_UP, KC_END, KC_PGUP, KC_UP, KC_F7, KC_F8, KC_F9, KC_F10, \
          KC_DEL, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGDN, KC_DOWN, KC_F4, KC_F5, KC_F6, KC_F11, \
-         KC_FN5, KC_NO, KC_NO, KC_NO, KC_FN3, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12, \
+         KC_FN5, KC_NO, KC_NO, KC_NO, KC_FN3, GUI(ALT(KC_F11)), KC_F1, KC_F2, KC_F3, KC_F12, \
          KC_NO, KC_LSFT, KC_LGUI, KC_FN4, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC, KC_FN2, KC_NO, KC_NO, KC_ENT), \
   /* 3: hard dvorak */
   KEYMAP(KC_QUOT, KC_COMM, KC_DOT, KC_P, KC_Y, KC_F, KC_G, KC_C, KC_R, KC_L, \
@@ -55,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-  const uint16_t PROGMEM fn_actions[] = {
+const uint16_t PROGMEM fn_actions[] = {
   [0] = ACTION_LAYER_MOMENTARY(1),  // to Fn overlay
   [1] = ACTION_LAYER_ON(2, 1),  // switch to layer 2
   [2] = ACTION_LAYER_OFF(2, 1),  // switch back to layer 0
@@ -68,11 +76,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [8] = ACTION_LAYER_OFF(5, 1),  // switch back to layer 0 hard
   [9] = ACTION_LAYER_MOMENTARY(4),  // to Fn overlay
   [10] = ACTION_LAYER_OFF(3, 1),
-  };
+};
 
-  void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
-  {
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+{
   if (id == BOOTLOADER) {
-  bootloader();
+    bootloader();
   }
-  }
+}

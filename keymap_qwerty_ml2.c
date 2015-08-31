@@ -1,5 +1,12 @@
 #include "keymap_common.h"
 
+/* This keymap allows you to hold down fn+shift to hit keys on L2
+   momentarily, rather than switching layers in a "sticky" way.
+
+   NB: There is currently a bug in TMK where it works fine if you
+   release shift first, but if you release fn first, the fn key
+   remains stuck down until you tap fn again to release it. */
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: mostly letters */
   KEYMAP(KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, \
