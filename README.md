@@ -1,15 +1,36 @@
 # Atreus keyboard firmware
 
-The [Atreus](http://atreus.technomancy.us) is a 40% column-staggered
-ergo keyboard.
+The [Atreus](https://atreus.technomancy.us) is a small mechanical
+column-staggered ergonomic keyboard, usually built from a kit.
 
-The TMK firmware is more featureful than the default
-[Atreus firmware](https://github.com/technomancy/atreus-firmware),
-however it is much more complex.
+## Layout
 
-There is also a [firmware](https://github.com/technomancy/menelaus)
-implemented in [Microscheme](http://microscheme.org), but that is intended
-primarily for educational purposes at this point.
+Only a handful of punctuation marks (and no digits) are available
+unshifted, and all the modifiers are on the bottom row:
+
+     q     w     e     r     t       ||       y     u     i     o    p
+     a     s     d     f     g       ||       h     j     k     l    ;
+     z     x     c     v     b       ||       n     m     ,     .    /
+    esc   tab  super shift bksp ctrl || alt space  fn     -     '  enter
+
+The numbers and most of the punctuation are on the fn layer with a
+numpad-style arrangement under the right hand:
+
+     !    @     up     {    }        ||     pgup    7     8     9    *
+     #  left   down  right  $        ||     pgdn    4     5     6    +
+     [    ]      (     )    &        ||       `     1     2     3    \
+    L2  insert super shift bksp ctrl || alt space   fn    .     0    =
+
+The `L2` key switches it to the function layer, and tapping `L0` here
+brings it back to the first layer.
+
+    insert home   up  end   pgup       ||      up     F7    F8    F9   F10
+     del   left  down right pgdn       ||     down    F4    F5    F6   F11
+          volup             reset      ||             F1    F2    F3   F12
+          voldn  super shift bksp ctrl || alt space   L0  prtsc scroll pause
+
+Further alternate layouts are included, such as Colemak and several
+Dvorak options.
 
 ## Prerequisites
 
@@ -32,40 +53,22 @@ On Mac OS X with Homebrew:
     $ brew install avr-libc
     $ brew install avrdude
 
+If you don't want to use Homebrew you can instead download
+[Crosspack for AVR](https://www.obdev.at/products/crosspack/index.html).
+
 ## Uploading
 
-Running `make upload KEYMAP=qwerty USB=/dev/ttyACM0` will compile the
-firmware with the selected layout and begin the upload process. The
-`USB` option should be the path of the USB serial port opened by the
-bootloader. On Linux-based systems it's usually `/dev/ttyACM0` while
-on Macs it's usually `/dev/cu.usbmodem1421`. For the upload process to
-complete you'll need to get the controller into its bootloader. If
-you've already got the firmware loaded on the controller, you should
-have a key bound for this; typically this is activated by jumping to
-layer 2 (`fn`+`ESC`) and then hitting `enter`.
-
-If your board has never before had
-[the firmware uploaded](http://www.pololu.com/docs/0J61/5.3), you will
-have to *hard reset* by connecting the `RST` pin to ground twice in
-under a second to jump to the bootloader. (This requires removing the
-back panel and touching them together with a piece of wire or a
-trimmed diode leg.)  For older models, `RST` and ground are exposed
-with hookup wire poking out of the bottom of the board, but for newer
-models they are the sixth and seventh pin down on the right-side row
-of microcontroller pins.
-
-For first-time uploads, hit reset before running `make upload`.
-You'll know if the board is in the bootloader because the LED will
-pulse. If you wait too long (8 seconds) in the bootloader without
-uploading new firmware, it will go back to normal operation.
-
-If you are hacking the lower-level logic of the firmware, the reset
-key might not be reachable (due to bugs in layer functionality, etc)
-and you will have to initiate a manual reset as per above with the `RST` pin.
-
-Sometimes it can be tricky to get the timing right with the hard
-reset; it can take a few attempts when you are first uploading the
-firmware to a fresh board.
+Running `make upload KEYMAP=qwerty USB=/dev/ttyACM0` from the
+directory containing this readme will compile the firmware with the
+selected layout and begin the upload process. The `USB` argument
+should be the path of the USB serial port opened by the bootloader. On
+Linux-based systems it's usually `/dev/ttyACM0` while on Macs it's
+usually `/dev/cu.usbmodem1421`. For the upload process to complete
+you'll need to get the controller into its bootloader. If you've
+already got the firmware loaded on the controller, you should have a
+key bound for this; typically this is activated by jumping to layer 2
+(`fn`+`ESC`) and then hitting `B`. If this is your first time
+uploading, see "Reset" below.
 
 You can identify the USB device like so:
 
@@ -78,7 +81,61 @@ $ diff /tmp/dev-off /tmp/dev-on # this will show the device path
 If the upload does not complete, check the permissions on the USB
 device and ensure it's writeable by your user. You may need to run
 `sudo make udev` on some Linux-based systems to install a udev rule if
-the permissions aren't right.
+another driver mistakenly takes control of the bootloader device.
+
+Sometimes it can be tricky to get the timing right with the hard
+reset; it can take a few attempts when you are first uploading the
+firmware to a fresh board.
+
+### Windows
+
+Start by installing the A-Star drivers, as
+[documented by Pololu](https://www.pololu.com/docs/0J61/6.1). Once the
+driver is installed and the device is plugged in, you can determine
+the correct port setting by resetting the controller and looking at
+the "Ports (COM & LPT)"
+[section of the Windows Device Manager](https://a.pololu-files.com/picture/0J5272.500.png);
+it should show up as "Pololu A-Star Micro 32U4" if you check within 8
+seconds of initiating a reset.
+
+You can install the whole development toolchain using
+[WinAVR](http://winavr.sourceforge.net/) to compile using `make upload
+[...]` with the instructions above.
+
+However, if the whole compiler setup is too complicated, it's also
+possible to download a
+[precompiled firmware](http://atreus.technomancy.us/atreus-tmk.hex)
+containing the default layout and uploading it with the simpler
+[AVRDUDESS](http://blog.zakkemble.co.uk/avrdudess-a-gui-for-avrdude/).
+
+These are the steps to using AVRDUDESS:
+
+* pick "avr109" as the programmer
+* select "ATmega32u4" from the MCU section in the upper left
+* select the port in the upper left as found in the device manager
+* choose the .hex file you downloaded in the "flash" section
+* reset the microcontroller so that the LED is gently pulsing
+* press "go" under "flash"
+
+### Reset
+
+If you've already got the firmware loaded on the controller, you
+should have a key bound to reset; typically this is activated by
+jumping to layer 2 (`fn`+`ESC`) and then hitting `B`. (`Enter` on
+older versions of the firmware.)
+
+If your board has never before had
+[the firmware uploaded](http://www.pololu.com/docs/0J61/5.3), you will
+have to *hard reset* by connecting the `RST` pin to ground twice in
+under a second to jump to the bootloader. (This requires removing the
+back panel.) They are the sixth and seventh pin down on the right-side
+row of microcontroller pins. If you idle in the bootloader for 8
+seconds without uploading, the controller will exit the bootloader and
+return to normal operation.
+
+If you are hacking the lower-level logic of the firmware, the reset
+key might not be reachable (due to bugs in layer functionality, etc)
+and you will have to initiate a manual reset with the `RST` pin.
 
 ## Teensy 2
 
@@ -99,3 +156,15 @@ once.
 If you assembled your board with the PCB in backwards, never fear!
 This is easy to fix in the firmware. Compile with `OPT_DEFS=-DPCBFLIP make`
 to use the pinout for the reversed board.
+
+## Alternatives
+
+The default firmware for the Atreus used to be a
+[custom codebase](https://github.com/technomancy/atreus-firmware)
+which was a good deal simpler but less featureful. If you are
+interested in extending the codebase yourself beyond just creating new
+layouts, you may be interested in that instead.
+
+There is also the [Menelaus](https://github.com/technomancy/menelaus)
+firmware, which is written in MicroScheme. Note that this is still not
+very polished and intended more for educational purposes than anything else.
