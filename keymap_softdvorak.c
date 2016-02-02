@@ -1,12 +1,9 @@
 #include "keymap_common.h"
 
 // This layout is designed to be used on machines where the OS is
-// already set to a dvorak layout. It assumes that the dvorak mapping
-// will be happening on the PC side and sends "un-dvorakized"
-// keycodes. (So it sends qwerty letters, but specially-shuffled
-// punctuation.)  This is helpful for laptops where you want to be
-// able to use the internal keyboard in dvorak without having to
-// change the OS mappings.
+// already set to a dvorak layout.
+
+// You probably want keymap_multidvorak.c instead.
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: qwerty */
