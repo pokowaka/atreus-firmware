@@ -30,7 +30,10 @@ brings it back to the first layer.
           voldn  super shift bksp ctrl || alt space   L0  prtsc scroll pause
 
 Further alternate layouts are included, such as Colemak and several
-Dvorak options.
+Dvorak options. Note that some keys (`%`, `^`, `~`, and `|`) do not
+have dedicated keys; you must use `fn` and `shift` together to type
+them. The `keymap_qwerty_classic.c` layout has these keys on the fn
+layer, but it moves the arrow keys to L2.
 
 ## Prerequisites
 
