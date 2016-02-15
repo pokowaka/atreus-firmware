@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CTRL(key) ACTION(ACT_MODS, (MOD_LCTL << 8) | (key))
 #define ALT(key) ACTION(ACT_MODS, (MOD_LALT << 8) | (key))
 #define GUI(key) ACTION(ACT_MODS, (MOD_LGUI << 8) | (key))
+#define RALT(key) ACTION(ACT_MODS, (MOD_RALT << 8) | (key))
 
 extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
 extern const uint16_t fn_actions[];
