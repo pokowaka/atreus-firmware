@@ -157,8 +157,9 @@ once.
 ## PCB flip
 
 If you assembled your board with the PCB in backwards, never fear!
-This is easy to fix in the firmware. Compile with `OPT_DEFS=-DPCBFLIP make`
-to use the pinout for the reversed board.
+This is easy to fix in the firmware. Compile with `OPT_DEFS=-DPCBFLIP
+make` to use the pinout for the reversed board with the columns
+swapped. (This used to be called `SWAPCOLUMNS` in older firmware.)
 
 ## Alternatives
 
