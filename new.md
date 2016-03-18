@@ -138,7 +138,7 @@ work with hand-wired boards that use the Teensy 2. If you have one
 with a Teensy 2 then you will need to install the
 [teensy loader](http://www.pjrc.com/teensy/loader_cli.html).
 
-Uploading to a Teensy 2 can be done with `TEENSY=y make teensy
+Uploading to a Teensy 2 can be done with `OPT_DEFS=-DTEENSY make teensy
 KEYMAP=qwerty`.  Specifying the path to the USB device as per above is
 unnecessary. Also getting to the bootloader on the Teensy is simpler;
 if you can't do it in software simply press the hardware reset button
