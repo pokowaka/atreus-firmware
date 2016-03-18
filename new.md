@@ -115,13 +115,29 @@ Install [WinAVR](http://winavr.sourceforge.net/).
 
 ### Layout
 
-TODO.
+Copy `keymap_qwerty.c` (or another) into a new file to create your new
+layout, and change the `keymaps` array to place the keycodes you want
+in the positions you want.
+
+The `FN_ARROW_LAYER` and `LAYER_TWO` macros correspond to the default
+extra layers as defined in `keymap_common.h`; replace them with
+`KEYMAP` calls if you want to customize these layers. For keys that do
+more than just send a keycode, you can add to the `fn_actions` array
+of function pointers.
+
+See
+[keycode.txt](https://github.com/technomancy/tmk_keyboard/blob/atreus/doc/keycode.txt)
+for a list of all supported keycodes. Further details of how the
+layers and actions work are described in
+[keymap.md](https://github.com/technomancy/tmk_keyboard/blob/atreus/doc/keymap.md).
 
 ### Compiling
 
-Choose a keymap from the `keymap_*.c` files in this directory. Run
-`make upload KEYMAP=qwerty USB=/dev/ttyACM0` with the USB device
-replaced with the one determined in the upload steps above.
+Choose a keymap from the `keymap_*.c` files in this directory. For
+instance, for the `keymap_multidvorak.c` layout, you would use
+`KEYMAP=multidvorak`. Run `make upload KEYMAP=qwerty USB=/dev/ttyACM0`
+with the USB device replaced with the one determined in the upload
+steps above, and reset your board.
 
 The current design of the Atreus has the PCB installed with the
 labeled side facing up. Older revisions had the labeled side facing
