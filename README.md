@@ -7,102 +7,50 @@ This repository contains firmware (called TMK) loaded into its
 controller to make the keyboard function. You can also use it to
 customize its layout or behavior.
 
-## Layout
+You only need to compile the code here if you want to make changes to
+the layout. It's highly recommended that you do this at some point,
+but maybe you're in a hurry and you just want to get started--in that
+case you can use the Quick Start.
 
-Only a handful of punctuation marks (and no digits) are available
-unshifted, and all the modifiers are on the bottom row:
+## Quick Start
 
-     q     w     e     r     t       ||       y     u     i     o    p
-     a     s     d     f     g       ||       h     j     k     l    ;
-     z     x     c     v     b       ||       n     m     ,     .    /
-    esc   tab  super shift bksp ctrl || alt space  fn     -     '  enter
+Download one of the [precompiled firmwares](https://atreus.technomancy.us/download).
 
-The numbers and most of the punctuation are on the fn layer with a
-numpad-style arrangement under the right hand:
+### Installing on Debian or Debian-based systems
 
-     !    @     up     {    }        ||     pgup    7     8     9    *
-     #  left   down  right  $        ||     pgdn    4     5     6    +
-     [    ]      (     )    &        ||       `     1     2     3    \
-    L2  insert super shift bksp ctrl || alt space   fn    .     0    =
+    $ sudo apt-get install avrdude
 
-The `L2` key switches it to the function layer, and tapping `L0` here
-brings it back to the first layer.
+### Installing on Mac OS X
 
-    insert home   up  end   pgup       ||      up     F7    F8    F9   F10
-     del   left  down right pgdn       ||     down    F4    F5    F6   F11
-          volup             reset      ||             F1    F2    F3   F12
-          voldn  super shift bksp ctrl || alt space   L0  prtsc scroll pause
-
-Further alternate layouts are included, such as Colemak and several
-Dvorak options. Note that some keys (`%`, `^`, `~`, and `|`) do not
-have dedicated keys; you must use `fn` and `shift` together to type
-them. The `keymap_qwerty_classic.c` layout has these keys on the fn
-layer, but it moves the arrow keys to L2.
-
-## Prerequisites
-
-There are two distinct things you can do with the firmware; first you
-compile it (turn the source code into a binary you can upload), and
-secondly you upload it onto the controller unit.
-
-Install
-[gcc-avr](http://www.nongnu.org/avr-libc/user-manual/install\_tools.html)
-and [avrdude](http://www.nongnu.org/avrdude/).
-
-On Debian-based systems:
-
-    $ sudo apt-get install avrdude gcc-avr avr-libc
-
-Some linux-based systems will need a udev rule to grant permissions to
-the USB device for uploading firmware.
-
-    $ sudo make udev
-
-On Mac OS X with Homebrew:
+If you have Homebrew:
 
     $ brew tap larsimmisch/avr
-    $ brew install avr-libc
     $ brew install avrdude
 
-If you don't want to use Homebrew you can instead download
-[Crosspack for AVR](https://www.obdev.at/products/crosspack/index.html).
+If you don't have Homebrew, use [Crosspack for AVR](https://www.obdev.at/products/crosspack/index.html).
 
-See below for Windows instructions.
+### Uploading on Debian/Mac
 
-## Compiling and Uploading
+You will need to determine the path to the USB device for the last argument:
 
-Running `make upload KEYMAP=qwerty USB=/dev/ttyACM0` from the
-directory containing this readme will compile the firmware with the
-selected layout and begin the upload process. The `USB` argument
-should be the path of the USB serial port opened by the bootloader. On
-Linux-based systems it's usually `/dev/ttyACM0` while on Macs it's
-usually `/dev/cu.usbmodem1421`. For the upload process to complete
-you'll need to get the controller into its bootloader. If you've
-already got the firmware loaded on the controller, you should have a
-key bound for this; typically this is activated by jumping to layer 2
-(`fn`+`ESC`) and then hitting `B`. If this is your first time
-uploading, see "Reset" below.
+    $ ls /dev > /tmp/dev-off # run this while the device is unplugged
+    $ ls /dev > /tmp/dev-on # run this while the device is in bootloader mode
+    $ diff /tmp/dev-off /tmp/dev-on # this will show the device path
 
-You can identify the USB device like so:
+It is usually something like `/dev/ttyACM0` on Linux-based systems and
+something like `/dev/cu.usbmodem1421` on Macs.
 
-```
-$ ls /dev > /tmp/dev-off # run this while the device is unplugged
-$ ls /dev > /tmp/dev-on # run this while the device is in bootloader mode
-$ diff /tmp/dev-off /tmp/dev-on # this will show the device path
-```
+Replace `atreus.hex` here with the filename of whatever you downloaded
+above. Reset the board (see "Reset" below) and quickly run this command:
+
+    $ avrdude -p atmega32u4 -c avr109 -U flash:w:atreus.hex -P /path/to/usb
+
+It should emit a bunch of output followed by "avrdude done.  Thank you."
 
 If the upload does not complete, check the permissions on the USB
 device and ensure it's writeable by your user. You may need to run
 `sudo make udev` on some Linux-based systems to install a udev rule if
 another driver mistakenly takes control of the bootloader device.
-
-The current design of the Atreus has the PCB installed with the
-labeled side facing up. Older revisions had the labeled side facing
-down. If you follow the instructions here and get the layout flipped
-backwards, you have a board with the PCB facing down. Use this instead
-to upload: `OPT_DEFS=-DPCBDOWN make upload KEYMAP=qwerty
-USB=/dev/ttyACM0`, replacing `KEYMAP` and `USB` with their appropriate
-values.
 
 Sometimes it can be tricky to get the timing right with the hard
 reset; it can take a few attempts when you are first uploading the
@@ -110,53 +58,93 @@ firmware to a fresh board.
 
 ### Windows
 
-Start by installing the A-Star drivers, as
-[documented by Pololu](https://www.pololu.com/docs/0J61/6.1). Once the
-driver is installed and the device is plugged in, you can determine
-the correct port setting by resetting the controller and looking at
-the "Ports (COM & LPT)"
+Start by installing the A-Star drivers, as [documented by Pololu](https://www.pololu.com/docs/0J61/6.1).
+
+You will need to determine the correct port setting by resetting the
+controller and looking at the "Ports (COM & LPT)"
 [section of the Windows Device Manager](https://a.pololu-files.com/picture/0J5272.500.png);
 it should show up as "Pololu A-Star Micro 32U4" if you check within 8
 seconds of initiating a reset.
 
-You can install the whole development toolchain using
-[WinAVR](http://winavr.sourceforge.net/) to compile using `make upload
-[...]` with the instructions above.
-
-However, if the whole compiler setup is too complicated, it's also
-possible to download a
-[precompiled firmware](http://atreus.technomancy.us/atreus-tmk.hex)
-containing the default layout and uploading it with the simpler
-[AVRDUDESS](http://blog.zakkemble.co.uk/avrdudess-a-gui-for-avrdude/).
-
-These are the steps to using AVRDUDESS:
+Then install
+[AVRDUDESS](http://blog.zakkemble.co.uk/avrdudess-a-gui-for-avrdude/)
+and run it.
 
 * pick "avr109" as the programmer
 * select "ATmega32u4" from the MCU section in the upper left
 * select the port in the upper left as found in the device manager
-* choose the .hex file you downloaded in the "flash" section
+* choose the .hex file you downloaded
 * reset the microcontroller so that the LED is gently pulsing
 * press "go" under "flash"
 
-### Reset
+## Reset
+
+If this is your first time
+[uploading firmware](http://www.pololu.com/docs/0J61/5.3), you will
+have to *hard reset* by connecting the `RST` pin to ground twice in
+under a second to jump to the bootloader. (This requires removing the
+back panel.) They are the sixth and seventh pin down on the left-side
+row of microcontroller pins. (Right side for older boards with the PCB
+upside-down) If you idle in the bootloader for 8 seconds without
+uploading, the controller will exit the bootloader and return to
+normal operation.
 
 If you've already got the firmware loaded on the controller, you
 should have a key bound to reset; typically this is activated by
 jumping to layer 2 (`fn`+`ESC`) and then hitting `B`. (`Enter` on
 older versions of the firmware.)
 
-If your board has never before had
-[the firmware uploaded](http://www.pololu.com/docs/0J61/5.3), you will
-have to *hard reset* by connecting the `RST` pin to ground twice in
-under a second to jump to the bootloader. (This requires removing the
-back panel.) They are the sixth and seventh pin down on the right-side
-row of microcontroller pins. If you idle in the bootloader for 8
-seconds without uploading, the controller will exit the bootloader and
-return to normal operation.
+## Full Compile
 
-If you are hacking the lower-level logic of the firmware, the reset
-key might not be reachable (due to bugs in layer functionality, etc)
-and you will have to initiate a manual reset with the `RST` pin.
+If you want to customize the layout (and who doesn't?) you'll need the
+full AVR compiler suite.
+
+### Debian
+
+    $ sudo apt-get install gcc-avr avr-libc
+
+### Mac OS X
+
+    $ brew install avr-libc
+    
+If you already installed Crosspack above you should be fine.
+
+### Windows
+
+Install [WinAVR](http://winavr.sourceforge.net/).
+
+### Layout
+
+Copy `keymap_qwerty.c` (or another) into a new file to create your new
+layout, and change the `keymaps` array to place the keycodes you want
+in the positions you want.
+
+The `FN_ARROW_LAYER` and `LAYER_TWO` macros correspond to the default
+extra layers as defined in `keymap_common.h`; replace them with
+`KEYMAP` calls if you want to customize these layers. For keys that do
+more than just send a keycode, you can add to the `fn_actions` array
+of function pointers.
+
+See
+[keycode.txt](https://github.com/technomancy/tmk_keyboard/blob/atreus/doc/keycode.txt)
+for a list of all supported keycodes. Further details of how the
+layers and actions work are described in
+[keymap.md](https://github.com/technomancy/tmk_keyboard/blob/atreus/doc/keymap.md).
+
+### Compiling
+
+Choose a keymap from the `keymap_*.c` files in this directory. For
+instance, for the `keymap_multidvorak.c` layout, you would use
+`KEYMAP=multidvorak`. Run `make upload KEYMAP=qwerty USB=/dev/ttyACM0`
+with the USB device replaced with the one determined in the upload
+steps above, and reset your board.
+
+The current design of the Atreus has the PCB installed with the
+labeled side facing up. Older revisions had the labeled side facing
+down. If you follow the instructions here and get the layout flipped
+backwards, you have a board with the PCB facing down. Use this instead
+to upload: `OPT_DEFS=-DPCBDOWN make upload KEYMAP=qwerty
+USB=/dev/ttyACM0`.
 
 ## Teensy 2
 
@@ -177,9 +165,11 @@ once.
 The default firmware for the Atreus used to be a
 [custom codebase](https://github.com/technomancy/atreus-firmware)
 which was a good deal simpler but less featureful. If you are
-interested in extending the codebase yourself beyond just creating new
-layouts, you may be interested in that instead.
+interested learning about how keyboard matrix scanning works or in
+extending the codebase yourself beyond just creating new layouts, you
+may be interested in that instead.
 
 There is also the [Menelaus](https://github.com/technomancy/menelaus)
 firmware, which is written in MicroScheme. Note that this is still not
 very polished and intended more for educational purposes than anything else.
+
