@@ -38,8 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
 extern const uint16_t fn_actions[];
 
-
-#define KEYMAP( \
+#define KEYMAP_PCBDOWN( \
   K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, \
   K10, K11, K12, K13, K14, K15, K16, K17, K18, K19, \
   K20, K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A, \
@@ -48,8 +47,26 @@ extern const uint16_t fn_actions[];
   { K00, K01, K02, K03, K04, KC_NO, K05, K06, K07, K08, K09 }, \
   { K10, K11, K12, K13, K14, KC_NO, K15, K16, K17, K18, K19 }, \
   { K20, K21, K22, K23, K24, K35,   K25, K26, K27, K28, K29 }, \
-  { K2A, K30, K31, K32, K33, K34,   K36, K37, K38, K39, K3A }      \
+  { K2A, K30, K31, K32, K33, K34,   K36, K37, K38, K39, K3A } \
 }
+
+#define KEYMAP_PCBUP( \
+  K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, \
+  K10, K11, K12, K13, K14, K15, K16, K17, K18, K19, \
+  K20, K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A, \
+  K30, K31, K32, K33, K34, K35, K36, K37, K38, K39, K3A \
+) {                                                                     \
+  { K00, K01, K02, K03, K04, KC_NO, K05, K06, K07, K08, K09 }, \
+  { K10, K11, K12, K13, K14, KC_NO, K15, K16, K17, K18, K19 }, \
+  { K20, K21, K22, K23, K24, K34,   K25, K26, K27, K28, K29 }, \
+  { K2A, K30, K31, K32, K33, K35,   K36, K37, K38, K39, K3A }      \
+}
+
+#ifdef PCBDOWN
+#define KEYMAP KEYMAP_PCBDOWN
+#else
+#define KEYMAP KEYMAP_PCBUP
+#endif
 
 #define FN_LAYER   KEYMAP(SHIFT(KC_1), SHIFT(KC_2), SHIFT(KC_LBRC), SHIFT(KC_RBRC), SHIFT(KC_BSLS), \
                             KC_PGUP, KC_7, KC_8, KC_9, SHIFT(KC_8),       \

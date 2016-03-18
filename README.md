@@ -3,6 +3,10 @@
 The [Atreus](https://atreus.technomancy.us) is a small mechanical
 column-staggered ergonomic keyboard, usually built from a kit.
 
+This repository contains firmware (called TMK) loaded into its
+controller to make the keyboard function. You can also use it to
+customize its layout or behavior.
+
 ## Layout
 
 Only a handful of punctuation marks (and no digits) are available
@@ -37,6 +41,10 @@ layer, but it moves the arrow keys to L2.
 
 ## Prerequisites
 
+There are two distinct things you can do with the firmware; first you
+compile it (turn the source code into a binary you can upload), and
+secondly you upload it onto the controller unit.
+
 Install
 [gcc-avr](http://www.nongnu.org/avr-libc/user-manual/install\_tools.html)
 and [avrdude](http://www.nongnu.org/avrdude/).
@@ -59,7 +67,9 @@ On Mac OS X with Homebrew:
 If you don't want to use Homebrew you can instead download
 [Crosspack for AVR](https://www.obdev.at/products/crosspack/index.html).
 
-## Uploading
+See below for Windows instructions.
+
+## Compiling and Uploading
 
 Running `make upload KEYMAP=qwerty USB=/dev/ttyACM0` from the
 directory containing this readme will compile the firmware with the
@@ -85,6 +95,14 @@ If the upload does not complete, check the permissions on the USB
 device and ensure it's writeable by your user. You may need to run
 `sudo make udev` on some Linux-based systems to install a udev rule if
 another driver mistakenly takes control of the bootloader device.
+
+The current design of the Atreus has the PCB installed with the
+labeled side facing up. Older revisions had the labeled side facing
+down. If you follow the instructions here and get the layout flipped
+backwards, you have a board with the PCB facing down. Use this instead
+to upload: `OPT_DEFS=-DPCBDOWN make upload KEYMAP=qwerty
+USB=/dev/ttyACM0`, replacing `KEYMAP` and `USB` with their appropriate
+values.
 
 Sometimes it can be tricky to get the timing right with the hard
 reset; it can take a few attempts when you are first uploading the
