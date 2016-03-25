@@ -37,11 +37,13 @@ You will need to determine the path to the USB device for the last argument:
     $ ls /dev > /tmp/dev-on # run this while the device is in bootloader mode
     $ diff /tmp/dev-off /tmp/dev-on # this will show the device path
 
+You will need to enter bootloader mode to do this; see the "Reset" section below.
+
 It is usually something like `/dev/ttyACM0` on Linux-based systems and
 something like `/dev/cu.usbmodem1421` on Macs.
 
 Replace `atreus.hex` here with the filename of whatever you downloaded
-above. Reset the board (see "Reset" below) and quickly run this command:
+above. Reset the board and quickly run this command:
 
     $ avrdude -p atmega32u4 -c avr109 -U flash:w:atreus.hex -P /path/to/usb
 
