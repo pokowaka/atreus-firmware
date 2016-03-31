@@ -148,6 +148,10 @@ backwards, you have a board with the PCB facing down. Use this instead
 to upload: `OPT_DEFS=-DPCBDOWN make upload KEYMAP=qwerty
 USB=/dev/ttyACM0`.
 
+Formerly you would have to specify `SWAPCOLUMNS` or `PCBFLIP` for
+boards that had the labeled side facing up, but this is now the
+default.
+
 ## Teensy 2
 
 This codebase defaults to targeting the most recent PCB-based design
