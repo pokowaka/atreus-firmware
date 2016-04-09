@@ -26,10 +26,11 @@ If you have Homebrew:
 
     $ brew tap larsimmisch/avr
     $ brew install avrdude
+    $ brew install teensy_loader_cli
 
 If you don't have Homebrew, use [Crosspack for AVR](https://www.obdev.at/products/crosspack/index.html).
 
-### Uploading on Debian/Mac
+### Uploading on Debian
 
 You will need to determine the path to the USB device for the last argument:
 
@@ -57,6 +58,14 @@ another driver mistakenly takes control of the bootloader device.
 Sometimes it can be tricky to get the timing right with the hard
 reset; it can take a few attempts when you are first uploading the
 firmware to a fresh board.
+
+### Mac
+
+Running:
+
+$ OPT_DEFS=-DTEENSY make teensy KEYMAP=colemak
+
+Will compile for the teensy, and install it on the keyboard.
 
 ### Windows
 

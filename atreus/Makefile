@@ -45,7 +45,7 @@ USB ?= /dev/ttyACM0
 TARGET = atreus
 
 # Directory common source filess exist
-TOP_DIR = ../..
+TMK_DIR = ../tmk/tmk_core
 
 # Directory keyboard dependent files exist
 TARGET_DIR = .
@@ -130,7 +130,7 @@ OPT_DEFS += -DNO_SUSPEND_POWER_DOWN
 
 # Search Path
 VPATH += $(TARGET_DIR)
-VPATH += $(TOP_DIR)
+VPATH += $(TMK_DIR)
 
 # TODO: this is dumb and redundant
 ifdef TEENSY
@@ -143,9 +143,9 @@ upload: build
 	while [ ! -r $(USB) ]; do sleep 1; done; \
 	avrdude -p $(MCU) -c avr109 -U flash:w:$(TARGET).hex -P $(USB)
 
-include $(TOP_DIR)/protocol/lufa.mk
-include $(TOP_DIR)/common.mk
-include $(TOP_DIR)/rules.mk
+include $(TMK_DIR)/protocol/lufa.mk
+include $(TMK_DIR)/common.mk
+include $(TMK_DIR)/rules.mk
 
 udev:
 	cp a-star.rules /etc/udev/rules.d/
