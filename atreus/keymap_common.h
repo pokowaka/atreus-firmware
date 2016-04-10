@@ -19,24 +19,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <avr/pgmspace.h>
 #include "keycode.h"
 #include "action.h"
+#include "action_code.h"
+#include "action_layer.h"
 #include "action_macro.h"
+#include "action_util.h"
 #include "report.h"
 #include "host.h"
 #include "print.h"
 #include "debug.h"
 #include "keymap.h"
 
-#define SHIFT(key) ACTION(ACT_MODS, (MOD_LSFT << 8) | (key))
-#define CTRL(key) ACTION(ACT_MODS, (MOD_LCTL << 8) | (key))
-#define ALT(key) ACTION(ACT_MODS, (MOD_LALT << 8) | (key))
-#define GUI(key) ACTION(ACT_MODS, (MOD_LGUI << 8) | (key))
-#define RALT(key) ACTION(ACT_MODS, (MOD_RALT << 8) | (key))
-
-extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
-extern const uint16_t fn_actions[];
+extern const uint16_t actionmaps[][MATRIX_ROWS][MATRIX_COLS];
 
 #define KEYMAP_PCBDOWN( \
   K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, \
@@ -44,10 +39,10 @@ extern const uint16_t fn_actions[];
   K20, K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A, \
   K30, K31, K32, K33, K34, K35, K36, K37, K38, K39, K3A \
 ) {                                                                     \
-  { K09, K08, K07, K06, K05, KC_NO, K04, K03, K02, K01, K00 }, \
-  { K19, K18, K17, K16, K15, KC_NO, K14, K13, K12, K11, K10 }, \
-  { K29, K28, K27, K26, K25, K35,   K24, K23, K22, K21, K20 }, \
-  { K3A, K39, K38, K37, K36, K34,   K33, K32, K31, K30, K2A } \
+  { AC_##K09, AC_##K08, AC_##K07, AC_##K06, AC_##K05, KC_NO, AC_##K04, AC_##K03, AC_##K02, AC_##K01, AC_##K00 }, \
+  { AC_##K19, AC_##K18, AC_##K17, AC_##K16, AC_##K15, KC_NO, AC_##K14, AC_##K13, AC_##K12, AC_##K11, AC_##K10 }, \
+  { AC_##K29, AC_##K28, AC_##K27, AC_##K26, AC_##K25, AC_##K35,   AC_##K24, AC_##K23, AC_##K22, AC_##K21, AC_##K20 }, \
+  { AC_##K3A, AC_##K39, AC_##K38, AC_##K37, AC_##K36, AC_##K34,   AC_##K33, AC_##K32, AC_##K31, AC_##K30, AC_##K2A } \
 }
 
 #define KEYMAP_PCBUP( \
@@ -56,10 +51,10 @@ extern const uint16_t fn_actions[];
   K20, K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A, \
   K30, K31, K32, K33, K34, K35, K36, K37, K38, K39, K3A \
 ) {                                                                     \
-  { K00, K01, K02, K03, K04, KC_NO, K05, K06, K07, K08, K09 }, \
-  { K10, K11, K12, K13, K14, KC_NO, K15, K16, K17, K18, K19 }, \
-  { K20, K21, K22, K23, K24, K34,   K25, K26, K27, K28, K29 }, \
-  { K2A, K30, K31, K32, K33, K35,   K36, K37, K38, K39, K3A }      \
+  { AC_##K00, AC_##K01, AC_##K02, AC_##K03, AC_##K04, KC_NO, AC_##K05, AC_##K06, AC_##K07, AC_##K08, AC_##K09 }, \
+  { AC_##K10, AC_##K11, AC_##K12, AC_##K13, AC_##K14, KC_NO, AC_##K15, AC_##K16, AC_##K17, AC_##K18, AC_##K19 }, \
+  { AC_##K20, AC_##K21, AC_##K22, AC_##K23, AC_##K24, AC_##K34,   AC_##K25, AC_##K26, AC_##K27, AC_##K28, AC_##K29 }, \
+  { AC_##K2A, AC_##K30, AC_##K31, AC_##K32, AC_##K33, AC_##K35,   AC_##K36, AC_##K37, AC_##K38, AC_##K39, AC_##K3A }      \
 }
 
 #ifdef PCBDOWN
@@ -68,14 +63,27 @@ extern const uint16_t fn_actions[];
 #define KEYMAP KEYMAP_PCBUP
 #endif
 
-#define FN_LAYER   KEYMAP(SHIFT(KC_1), SHIFT(KC_2), SHIFT(KC_LBRC), SHIFT(KC_RBRC), SHIFT(KC_BSLS), \
-                            KC_PGUP, KC_7, KC_8, KC_9, SHIFT(KC_8),       \
-                          SHIFT(KC_3), SHIFT(KC_4), SHIFT(KC_9), SHIFT(KC_0), KC_GRAVE, \
-                            KC_PGDN, KC_4, KC_5, KC_6, SHIFT(KC_EQUAL),   \
-                          SHIFT(KC_5), SHIFT(KC_6), KC_LBRC, KC_RBRC, SHIFT(KC_GRAVE), \
-                            SHIFT(KC_7), KC_1, KC_2, KC_3, KC_BSLS,       \
-                          KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, \
-                            KC_SPC, KC_FN0, KC_DOT, KC_0, KC_EQUAL)
+#define AC_SH(key)    ACTION_MODS_KEY(MOD_LSFT, AC_##key)
+#define AC_CTRL(key)  ACTION_MODS_KEY(MOD_LCTL, AC_##key)
+#define AC_ALT(key)   ACTION_MODS_KEY(MOD_LALT, AC_##key)
+#define AC_GUI(key)   ACTION_MODS_KEY(MOD_LGUI, AC_##key)
+#define AC_LM1        ACTION_LAYER_MOMENTARY(1)
+#define AC_LM2        ACTION_LAYER_MOMENTARY(2)
+#define AC_LM3        ACTION_LAYER_MOMENTARY(3)
+#define AC_ON(layer)  ACTION_LAYER_ON((layer), 1)
+#define AC_OFF(layer) ACTION_LAYER_OFF((layer), 1)
+#define AC_BOOT       ACTION_FUNCTION(BOOTLOADER)
+
+/* 
+ *  !    @      {     }     |       ||       _     7     8     9    *
+ *  #    $      (     )     `       ||       -     4     5     6    +
+ *  %    ^      [     ]     ~       ||       &     1     2     3    \
+ * L2  insert super shift bksp ctrl || alt space   fn    .     0    =
+ */
+#define FN_LAYER   KEYMAP(SH(1), SH(2)  , SH(LBRC), SH(RBRC) , SH(BSLS)  /*| |*/  , SH(MINS), 7  , 8  , 9, SH(8),      \
+                          SH(3), SH(4)  , SH(9)   , SH(0)    , GRAVE     /*| |*/  , MINS    , 4  , 5  , 6, SH(EQUAL),  \
+                          SH(5), SH(6)  , LBRC    , RBRC     , SH(GRAVE) /*| |*/  , SH(7)   , 1  , 2  , 3, BSLS,          \
+                          ON(2), SH(INS), LGUI    , LSFT     , BSPC , LCTL,  LALT , SPC     , LM1, DOT, 0, EQUAL)
 
 /*
  *  !    @     up     {    }        ||     pgup    7     8     9    *
@@ -83,34 +91,37 @@ extern const uint16_t fn_actions[];
  *  [    ]      (     )    &        ||       `     1     2     3    \
  * L2  insert super shift bksp ctrl || alt space   fn    .     0    =
  */
-#define FN_ARROW_LAYER   KEYMAP(SHIFT(KC_1), SHIFT(KC_2), KC_UP, SHIFT(KC_LBRC), SHIFT(KC_RBRC), \
-                                  KC_PGUP, KC_7, KC_8, KC_9, SHIFT(KC_8), \
-                                SHIFT(KC_3), KC_LEFT, KC_DOWN, KC_RIGHT, SHIFT(KC_4), \
-                                  KC_PGDN, KC_4, KC_5, KC_6, SHIFT(KC_EQUAL), \
-                                KC_LBRC, KC_RBRC, SHIFT(KC_9), SHIFT(KC_0), SHIFT(KC_7), \
-                                  KC_GRAVE, KC_1, KC_2, KC_3, KC_BSLS,    \
-                                KC_FN1, SHIFT(KC_INS), KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, \
-                                  KC_LALT, KC_SPC, KC_FN0, KC_DOT, KC_0, KC_EQUAL)
+#define FN_ARROW_LAYER   KEYMAP(SH(1), SH(2)  , UP    , SH(LBRC), SH(RBRC), /*| |*/   PGUP , 7  , 8  , 9, SH(8), \
+                                SH(3), LEFT   , DOWN  , RIGHT   , SH(4),    /*| |*/   PGDN , 4  , 5  , 6, SH(EQUAL), \
+                                LBRC , RBRC   , SH(9) , SH(0)   , SH(7),    /*| |*/   GRAVE, 1  , 2  , 3, BSLS,    \
+                                ON(2), SH(INS), LGUI  , LSFT    , BSPC,   LCTL, LALT, SPC  , LM1, DOT, 0, EQUAL)
 
 /*
  * insert home   up  end   pgup       ||      up     F7    F8    F9   F10
  *  del   left  down right pgdn       ||     down    F4    F5    F6   F11
- *       volup             reset      ||             F1    F2    F3   F12
- *       voldn  super shift bksp ctrl || alt space   L0  prtsc scroll pause
+ *  volup prev  play next  reset      ||             F1    F2    F3   F12
+ *  voldn mute super shift bksp ctrl  || alt space   L0  prtsc scroll pause
  */
-#define LAYER_TWO KEYMAP(KC_INS, KC_HOME, KC_UP, KC_END, KC_PGUP, \
-                         KC_UP, KC_F7, KC_F8, KC_F9, KC_F10, \
-                         KC_DEL, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGDN, \
-                         KC_DOWN, KC_F4, KC_F5, KC_F6, KC_F11,          \
-                         KC_NO, KC__VOLUP, KC_NO, KC_NO, KC_FN3, \
-                         KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,            \
-                         KC_NO, KC__VOLDOWN, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, \
-                         KC_LALT, KC_SPC, KC_FN2, KC_PSCREEN, KC_SLCK, KC_PAUSE)
+#define LAYER_TWO KEYMAP(INS , HOME, UP  , END  , PGUP,   /*| |*/   UP  , F7    , F8     , F9  , F10, \
+                         DEL , LEFT, DOWN, RIGHT, PGDN,   /*| |*/   DOWN, F4    , F5     , F6  , F11, \
+                         VOLU, MPRV, MPLY, MNXT , BOOT,   /*| |*/   NO  , F1    , F2     , F3  , F12, \
+                         VOLD, MUTE, LGUI, LSFT , BSPC, LCTL, LALT, SPC , OFF(2), LM2    , SLCK, PAUSE)
+
+
+/*
+ *  !    @      #     $    %        ||       ^     &     *     (    )
+ *  [    ]      -     _             ||             \     |   home  end` 
+ * 
+ * L2  insert super shift bksp ctrl || alt space   fn    .     0    =
+ */
+#define LAYER_THREE KEYMAP(SH(1), SH(2)  , SH(3)   , SH(4)   , SH(5),     /* || */   SH(6), SH(7), SH(8)    , SH(9), SH(0), \
+                           LBRC , RBRC   , MINS    , SH(MINS), NO   ,     /* || */   NO   , BSLS , SH(BSLS) , HOME , END  , \
+                           NO   , NO     , NO      , NO      , NO   ,     /* || */   NO   , NO   , NO       , NO   , NO   , \
+                           ON(2), SH(INS), LGUI    , LSFT    , BSPC,    LCTL,  LALT, SPC  , LM1  , LM3      , QUOT, ENT)
 
 enum function_id {
   BOOTLOADER,
 };
 
 void bootloader(void);
-
 #endif

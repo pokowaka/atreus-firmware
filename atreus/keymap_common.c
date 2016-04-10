@@ -16,16 +16,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "keymap_common.h"
 
-/* translates key to keycode */
-uint8_t keymap_key_to_keycode(uint8_t layer, keypos_t key)
+action_t action_for_key(uint8_t layer, keypos_t key)
 {
-    return pgm_read_word(&keymaps[(layer)][(key.row)][(key.col)]);
+  return (action_t)pgm_read_word(&actionmaps[(layer)][(key.row)][(key.col)]);
 }
 
-/* translates Fn keycode to action */
-action_t keymap_fn_to_action(uint8_t keycode)
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
-    return (action_t){ .code = pgm_read_word(&fn_actions[FN_INDEX(keycode)]) };
+  if (id == BOOTLOADER) {
+    bootloader();
+  }
 }
 
 void bootloader() {

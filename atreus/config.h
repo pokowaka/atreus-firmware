@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VENDOR_ID       0x16C0
 #define PRODUCT_ID      0x047C
 #define DEVICE_VER      36
-#define MANUFACTURER    technomancy
+#define MANUFACTURER    pokowaka 
 #define PRODUCT         Atreus
 #define DESCRIPTION     TMK keyboard firmware for Atreus
 
@@ -46,6 +46,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IS_COMMAND() ( \
     keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
 )
+
+/* period of tapping(ms) */
+#define TAPPING_TERM    300
+/* tap count needed for toggling a feature */
+#define TAPPING_TOGGLE  5
+/* Oneshot timeout(ms) */
+#define ONESHOT_TIMEOUT 300
 
 
 
