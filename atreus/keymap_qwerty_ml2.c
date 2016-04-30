@@ -1,4 +1,7 @@
 #include "keymap_common.h"
+#include <avr/pgmspace.h>
+#include "actionmap.h"
+#include "action_code.h"
 
 /* This keymap allows you to hold down fn+shift to hit keys on L2
    momentarily, rather than switching layers in a "sticky" way.
