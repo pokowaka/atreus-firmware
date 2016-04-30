@@ -1,4 +1,7 @@
 #include "keymap_common.h"
+#include <avr/pgmspace.h>
+#include "actionmap.h"
+#include "action_code.h"
 
 /* The default Atreus layout. First layer is normal keys, second
    (momentary fn layer) is numbers, most punctuation, and
