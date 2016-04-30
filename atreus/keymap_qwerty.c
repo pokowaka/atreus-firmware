@@ -5,7 +5,7 @@
    arrows. Third (modal, persistent) layer is function keys and other
    rarely-used keys. */
 
-const uint8_t PROGMEM actionmaps[][MATRIX_ROWS][MATRIX_COLS] = {
+const uint16_t PROGMEM actionmaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* 0: mostly letters */
   KEYMAP(Q, W, E, R, T, Y, U, I, O, P,            \
          A, S, D, F, G, H, J, K, L, SCLN,         \
